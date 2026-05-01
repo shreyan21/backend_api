@@ -1,0 +1,31 @@
+on:
+    push:
+        branches: "*"
+
+jobs:
+    docker-image-creation:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Loading repo
+              uses: actions/checkout@v4
+            
+              
+            - name: Logging to AWS
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::891377368653:role/myrole
+                aws-region: ap-south-1
+                
+            - name: Logging to AWS ECR
+              uses: aws-actions/amazon-ecr-login@v2
+            - name: Creating image
+              uses: docker/build-push-action@v5
+              with:
+                     context: .
+                     push: true
+                     tags: |
+                       891377368653.dkr.ecr.ap-south-1.amazonaws.com/myimage:latest
+                       891377368653.dkr.ecr.ap-south-1.amazonaws.com/myimage:${{github.sha}}
+
+
+
