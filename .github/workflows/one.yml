@@ -2,6 +2,10 @@ on:
     push:
         branches: "*"
 
+permissions:
+    id-token: write
+    contents: read
+
 jobs:
     docker-image-creation:
         runs-on: ubuntu-latest
